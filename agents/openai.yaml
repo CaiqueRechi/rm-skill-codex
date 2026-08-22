@@ -1,0 +1,7 @@
+interface:
+  display_name: "Caique's working conventions"
+  short_description: "Apply Caique's project and commit conventions"
+  default_prompt: "Use $rm-skill-codex while working in one of Caique's repositories."
+
+policy:
+  allow_implicit_invocation: true

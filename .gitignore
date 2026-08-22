@@ -1,0 +1,8 @@
+# Ruído do sistema operacional
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Espaço de trabalho do skill-creator, quando as avaliacoes rodam ao lado
+rm-skill-codex-workspace/
+dist/

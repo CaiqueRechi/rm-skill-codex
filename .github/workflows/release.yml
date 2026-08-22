@@ -1,0 +1,77 @@
+name: Validate and release Codex skill
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate release package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build release package
+        shell: pwsh
+        run: .github/scripts/package-skill.ps1
+
+  release:
+    name: Publish release
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build release package
+        shell: pwsh
+        run: .github/scripts/package-skill.ps1
+
+      - name: Create tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(tr -d '[:space:]' < VERSION)"
+          tag="v$version"
+          archive="dist/rm-skill-codex-$tag.zip"
+
+          if gh release view "$tag" >/dev/null 2>&1; then
+              echo "Release $tag already exists; nothing to publish."
+              exit 0
+          fi
+
+          git fetch --tags --force
+
+          if git rev-parse --verify --quiet "refs/tags/$tag" >/dev/null; then
+              tagCommit="$(git rev-list -n 1 "$tag")"
+              if [[ "$tagCommit" != "$GITHUB_SHA" ]]; then
+                  echo "Tag $tag already points to $tagCommit and has no release." >&2
+            echo "Bump VERSION before publishing another release." >&2
+                  exit 1
+              fi
+          else
+              git tag "$tag" "$GITHUB_SHA"
+              git push origin "$tag"
+          fi
+
+          gh release create "$tag" \
+              "$archive" \
+              "$archive.sha256" \
+              --verify-tag \
+              --target "$GITHUB_SHA" \
+            --title "rm-skill-codex $tag" \
+              --generate-notes
