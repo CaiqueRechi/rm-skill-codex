@@ -20,13 +20,17 @@ $requiredFiles = @(
     'SKILL.md',
     'README.md',
     'agents/openai.yaml',
-    'docs/testing.md',
     'references/splitting-commits.md'
 )
 foreach ($requiredFile in $requiredFiles) {
     if (-not (Test-Path -LiteralPath $requiredFile -PathType Leaf)) {
         throw "$requiredFile is required in the release package."
     }
+}
+
+$documentationFiles = Get-ChildItem -LiteralPath 'docs' -Filter '*.md' -File
+if ($documentationFiles.Count -eq 0) {
+    throw 'At least one Markdown file is required in docs/.'
 }
 
 $outputDirectory = Join-Path $repositoryRoot 'dist'
@@ -50,7 +54,7 @@ Copy-Item -LiteralPath 'README.md', 'SKILL.md' -Destination $packageDirectory
 Copy-Item -LiteralPath 'agents/openai.yaml' -Destination (
     Join-Path $packageDirectory 'agents'
 )
-Copy-Item -LiteralPath 'docs/testing.md' -Destination (
+Copy-Item -LiteralPath $documentationFiles.FullName -Destination (
     Join-Path $packageDirectory 'docs'
 )
 Copy-Item -LiteralPath 'references/splitting-commits.md' -Destination (

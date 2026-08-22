@@ -60,7 +60,7 @@ jobs:
               tagCommit="$(git rev-list -n 1 "$tag")"
               if [[ "$tagCommit" != "$GITHUB_SHA" ]]; then
                   echo "Tag $tag already points to $tagCommit and has no release." >&2
-            echo "Bump VERSION before publishing another release." >&2
+              echo "Bump VERSION before publishing another release." >&2
                   exit 1
               fi
           else
@@ -73,5 +73,5 @@ jobs:
               "$archive.sha256" \
               --verify-tag \
               --target "$GITHUB_SHA" \
-            --title "rm-skill-codex $tag" \
+              --title "rm-skill-codex $tag" \
               --generate-notes
