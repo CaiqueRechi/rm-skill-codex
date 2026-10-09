@@ -219,7 +219,7 @@ authorisation check, never by trusting an id that came from the request, and
 production never shows a stack trace.
 
 When the check finds a hole in code the change did not create, tell him
-straight away, in the topic of its own — not at the end of the report. Fixing it
+straight away, under a topic of its own — not at the end of the report. Fixing it
 is its own `fix:` commit, not something folded into the current change.
 
 Say in the report what you checked and what you found, including "nothing", so
