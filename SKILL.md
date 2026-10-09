@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, disagreements raised before anything is built, and pushing left to him. Load it before writing code or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, disagreements raised before anything is built, and pushing left to him. Load it before writing code or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -340,6 +340,32 @@ For example: freezing a test clock had to be committed *before* the rule that
 started rejecting past dates, because otherwise seven tests failed at that point
 in the history — even though the rule was written first.
 
+This is about arranging commits as you create them. Reordering commits that
+already exist is a rewrite, and the next section applies.
+
+### A mistake already committed gets a new commit
+
+Once a commit exists, a mistake found in it is corrected by a **new commit on
+top**, never by rewriting the one that holds it. That is `fix:` when what was
+wrong is behaviour; a mistake in a test or a page is corrected by a `test:` or a
+`docs:` commit, as the prefix table already says.
+
+Do not rewrite a commit unless he explicitly asks for it in that conversation:
+no `--amend`, no `fixup!` with autosquash, no rebase, no reset, no
+cherry-picking onto a rebuilt branch. It does not matter whether the commit was
+pushed — he pushes between turns without announcing it, so "nothing was sent
+yet" is a guess, and once he has read a commit the history he reviewed is the
+history he expects to find.
+
+The case that set the rule: corrections were folded into a commit with a fixup
+after it had been pushed, the reply said nothing had been sent, and his next
+push was rejected as non-fast-forward. The way out was rebuilding the branch on
+the remote commit with the corrections as commits of their own — exactly what a
+new commit would have produced in the first place.
+
+When he does ask for a rewrite, check the remote first — `git fetch` and look at
+the branch there — and say what you found before touching anything.
+
 ### Prefix
 
 Pick from this list, lowercase, followed by a colon:
@@ -440,6 +466,6 @@ Pushing is his. He reviews the commits first and pushes by hand. Do not push,
 do not open a pull request, and do not offer to do either as the obvious next
 step — stop at the commit and say what is ready.
 
-The same caution applies to anything else that rewrites shared history or leaves
-the machine: force-pushing, deleting branches, amending commits that already
-exist on a remote. Ask first.
+The same caution applies to anything else that leaves the machine or destroys
+history: force-pushing and deleting branches. Ask first. Rewriting commits is
+covered above, and is not done at all unless he asks.
