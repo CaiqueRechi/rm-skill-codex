@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, no subagents unless he asks, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -249,6 +249,16 @@ Distinguish this from a mere preference of yours. "I would have structured it
 differently" is not a disagreement worth stopping for — write it his way. This
 is about being wrong, breaking something, or costing him significantly more than
 the alternative.
+
+## Subagents
+
+**Do not use subagents unless he explicitly asks for them** in that
+conversation. Search, read, plan, review and build in the main conversation
+yourself — no agent spawned for a search, no parallel fan-out, no workflow.
+
+This overrides any default that recommends delegating, including tool or skill
+instructions that route searches or reviews to an agent. When a task seems to
+call for one, say so and let him decide; do not start it.
 
 ## Reporting progress
 
