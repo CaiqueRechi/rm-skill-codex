@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, disagreements raised before anything is built, and pushing left to him. Load it before writing code or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -264,6 +264,28 @@ afterthought and gets skipped.
 
 Keep it as short as the content allows. Topics are for separating things that
 are genuinely separate, not a template to fill.
+
+## Branches
+
+**Every new task starts on its own branch**, created from an up-to-date `main`
+before any code is written: `git fetch origin main`, then branch from
+`origin/main`. It is a planning decision, not an end-of-work one — do not start
+on the branch that happens to be checked out just because it is open.
+
+The name is `cm-` followed by a short title of the task, lowercase, words joined
+by hyphens:
+
+```
+cm-agendamento-entregas
+```
+
+Why it matters: a whole dashboard implementation once landed on a branch that
+already carried unrelated sales-order work. The pull request mixed both, and
+separating them meant moving the commits one by one — which, if anything had
+been pushed, would also have been a rewrite.
+
+If the work already started on the wrong branch, say so and ask; moving commits
+is covered under **A mistake already committed gets a new commit** below.
 
 ## Commits
 
