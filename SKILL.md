@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, no subagents unless he asks, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a security check on every change (bot spam, XSS, exposed secrets), a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, no subagents unless he asks, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -188,6 +188,42 @@ unless asked. Some repositories say exactly that in their own agent guidelines.
 His standing preference is the opposite, so write the documentation — and tell
 him when a repository's guidelines contradict this, because the guidelines are
 his to fix.
+
+## Security
+
+**Every change gets a security check before it is called done**, the same way it
+gets tests. Not a separate audit at the end of a project — the question is asked
+of each change, about what that change opens. Three things are always checked.
+
+**Bots creating records.** Anything that writes a record — a public form, a
+sign-up, a comment, an authenticated endpoint someone could script — needs a
+defence against automated submission. Throttle it per user and per IP. On a
+public form add a bot trap: a honeypot field, a minimum fill time, or the
+project's captcha if it has one. Validate on the server and reject duplicates
+where a duplicate makes no sense. Validation that only runs in the browser is a
+convenience, not a defence.
+
+**XSS.** Output is escaped by default, and nothing a user typed reaches the page
+raw: no unescaped Blade (`{!! !!}`), no `innerHTML`, no `x-html` or `v-html`
+with user data. When rich content is genuinely needed, sanitise it against an
+allowlist on the server. Remember the places escaping does not cover on its
+own — attributes, `href` and `src` that accept `javascript:`, JSON embedded in a
+`<script>` block.
+
+**Nothing sensitive is visible or reachable.** No key, token, password,
+username, connection string or personal data in source control, in the
+front-end bundle, in the HTML, in a `data-` attribute, in a URL or query
+string, in a log, in an error page or in an API response beyond what the viewer
+needs. Reachable matters as much as visible: every record is fetched through the
+authorisation check, never by trusting an id that came from the request, and
+production never shows a stack trace.
+
+When the check finds a hole in code the change did not create, tell him
+straight away, in the topic of its own — not at the end of the report. Fixing it
+is its own `fix:` commit, not something folded into the current change.
+
+Say in the report what you checked and what you found, including "nothing", so
+he can see the question was asked.
 
 ## Before saying it works
 
