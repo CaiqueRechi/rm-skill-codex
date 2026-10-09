@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, one commit per change written in English with no co-authorship, tests and documentation bundled with new development but split out of a non-trivial alteration, disagreements raised before anything is built, and pushing left to him. Load it before writing code or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, disagreements raised before anything is built, and pushing left to him. Load it before writing code or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -177,11 +177,8 @@ thing does, how to use it, the decisions that are not visible in the code, and
 what goes wrong if it is used incorrectly. A page that narrates the diff is not
 documentation — the diff already exists.
 
-Whether the documentation shares the change's commit or gets its own is decided
-under **What goes in one commit** below.
-
-Documentation is its own commit, `docs:`, on the same reasoning that tests get
-theirs. It lands last, once the change and its tests are in.
+Documentation is always its own commit, `docs:`, whatever the size or kind of
+the change. It lands last, once the change and its tests are in.
 
 Note that this reverses the common instruction to avoid creating documentation
 unless asked. Some repositories say exactly that in their own agent guidelines.
@@ -287,8 +284,11 @@ not, plus the two traps that make a split fail silently.
 
 ### What goes in one commit
 
-Tests and documentation are not automatically separate commits. It depends on
-whether the work is development or an alteration, and his rule for that is short:
+Documentation never shares a commit: it is always the last commit of the
+change, `docs:`, in every row of the table below.
+
+Tests are not automatically separate commits. It depends on whether the work is
+development or an alteration, and his rule for that is short:
 
 > **adding a new capability is development. Changing the way something already
 > works is an alteration.**
@@ -307,15 +307,15 @@ alterations.
 
 | The work is | Commits |
 | --- | --- |
-| new development | one commit — the code, its tests and its documentation together |
-| a trivial alteration | one commit, the same way |
-| a non-trivial alteration | separate: the change, then its tests, then its documentation |
+| new development | the code with its tests, then its documentation |
+| a trivial alteration | the change with its tests, then its documentation |
+| a non-trivial alteration | the change, then its tests, then its documentation |
 | a test for code that already exists | its own commit, always |
 
-Why the split falls that way: new development is reviewed as a whole, so
+Why the tests split that way: new development is reviewed as a whole, so
 dividing it only buys a commit where the feature exists untested, which nobody
 wants. An alteration inverts it — the change itself is what gets scrutinised, so
-lifting its tests and its pages out is what keeps that diff readable. The last
+lifting its tests out is what keeps that diff readable. The last
 row is separate for a different reason: a test for code that was already there
 belongs to no change, so it stands alone whatever its size.
 
@@ -323,8 +323,8 @@ belongs to no change, so it stands alone whatever its size.
 constant, a formatting fix. Nothing that alters behaviour, and nothing whose
 blast radius you had to work out; if you had to, it was not trivial.
 
-Bundling is not licensed by any of this: "everything together" means one
-development with its tests, not two developments sharing a commit.
+Bundling is not licensed by any of this: "together" means one development with
+its tests, not two developments sharing a commit.
 
 When separate, the order is change → tests → documentation, which keeps the
 history sound at each point — green before the test exists, green after the
