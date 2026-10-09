@@ -10,13 +10,18 @@ não descrevem nenhum sistema específico.
 | Assunto | Regra |
 | --- | --- |
 | Commits | um por alteração, em inglês, com prefixo convencional e sem coautoria |
+| Erro já commitado | corrigido em commit novo; reescrever só quando eu pedir |
+| Branch | uma por tarefa, a partir da `main`, no padrão `cm-titulo-resumido` |
 | Push | meu, sempre — o agente para no commit |
 | Testes | tudo testado; no mesmo commit quando é desenvolvimento, separado quando é alteração não trivial |
-| Documentação | sem ela o trabalho não está pronto |
+| Documentação | sem ela o trabalho não está pronto, e vai sempre num commit `docs:` próprio |
 | Comentários | só o necessário, e em inglês |
 | Nomes | `camelCase` no código, `PascalCase` em classe, `snake_case` no banco |
 | Migration | sempre reversível, e o `down()` executado |
-| Design | Clean Code e SOLID, sem abstração para um caso só |
+| Design | Clean Code e SOLID sempre, sem abstração para um caso só |
+| Segurança | toda alteração checada contra bot criando registro, XSS e dado sensível exposto |
+| Desempenho | cache onde o dado permitir; navegador e servidor escolhidos de propósito |
+| Subagentes | só quando eu pedir |
 | Discordância | falar antes de fazer, nunca depois |
 | Hooks | não se pula, nem com `--no-verify` |
 

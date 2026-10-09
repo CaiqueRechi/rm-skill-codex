@@ -7,7 +7,8 @@ variante é dividida entre equivalência de conteúdo, estrutura e comportamento
 ## Equivalência das convenções
 
 O corpo de `SKILL.md` mantém as decisões da skill original sobre design, nomes,
-banco, comentários, testes, documentação, discordâncias, relatórios e commits.
+banco, segurança, desempenho, comentários, testes, documentação, discordâncias,
+subagentes, relatórios, branches e commits.
 As únicas diferenças intencionais no arquivo são:
 
 - o campo `name`, agora `rm-skill-codex`;
@@ -35,6 +36,12 @@ estruturais antes de criar os artefatos de release. O workflow executa o mesmo
 script em pull requests e antes de publicar uma versão.
 
 ## Validação comportamental pendente
+
+As regras que entraram na versão 1.1.0 - erro já commitado corrigido em commit
+novo, branch `cm-` por tarefa, checagem de segurança, cache e divisão entre
+navegador e servidor, subagentes só quando pedidos, e documentação sempre em
+commit próprio - não passaram por rodada comportamental em nenhuma das duas
+variantes.
 
 Uma skill é texto, então validação estrutural não demonstra que ela muda as
 decisões do agente. A verificação comportamental adequada continua sendo dar a
