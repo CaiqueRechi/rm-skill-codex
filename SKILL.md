@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID, reversible migrations, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -16,9 +16,12 @@ him, not a new entry here.
 
 ## Design
 
-Clean Code and SOLID are the standing bar, in every project. Both names are
-broad enough to be agreed with and then ignored, so what follows is what they
-buy in practice — the things whose absence he would notice.
+Clean Code and SOLID are not negotiable. Every line you write follows them, in
+every project, always — a quick fix, a one-off script, a test or a deadline is
+not an exception, and "it is only a small change" is the usual way the
+exception gets in. Both names are broad enough to be agreed with and then
+ignored, so what follows is what they buy in practice — the things whose
+absence he would notice.
 
 **One reason to change per unit.** A function does one thing and its name says
 which. A class with two reasons to change is two classes. A boolean parameter
