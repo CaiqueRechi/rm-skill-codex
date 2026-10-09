@@ -1,6 +1,6 @@
 ---
 name: rm-skill-codex
-description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a security check on every change (bot spam, XSS, exposed secrets), a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, no subagents unless he asks, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
+description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a security check on every change (bot spam, XSS, exposed secrets), cache wherever the data allows, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, no subagents unless he asks, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
 # Caique's working conventions for Codex
@@ -224,6 +224,38 @@ is its own `fix:` commit, not something folded into the current change.
 
 Say in the report what you checked and what you found, including "nothing", so
 he can see the question was asked.
+
+## Performance
+
+**Use cache wherever the data allows it.** Before writing a query, a call to an
+external API or an expensive computation, ask whether its result can be reused,
+and cache it when it can. Three conditions come with every cache, in the same
+change:
+
+- **a way to invalidate it** — the write that makes the cached value stale also
+  clears it; a TTL alone is a guess at how wrong the data is allowed to be
+- **a key that carries everything the result depends on** — user, permission,
+  company, locale, filters — so one person can never be served another's data
+- **nothing sensitive in a shared or client-side cache**, which is the security
+  rule above applied to caching
+
+Data that must be live gets no cache, and say so when it is not obvious.
+
+**Decide where the work runs on purpose.** Each piece of work goes to the
+browser or stays on the server for a reason, not by habit.
+
+The browser takes what is interaction: state of the screen, filtering and
+sorting of a small set already on the page, feedback while typing. That saves a
+round trip for each click.
+
+The server keeps anything that must be trusted — authorisation, validation,
+business rules, anything touching a secret — and anything heavy: a large data
+set, an expensive calculation, a report. Shipping thousands of rows to filter in
+JavaScript moves the bottleneck onto the slowest device that opens the page;
+paginate and filter on the server instead. A rule checked in the browser is
+checked again on the server, because the browser is the user's to change.
+
+When the split is not obvious, state the choice and the reason in the report.
 
 ## Before saying it works
 
