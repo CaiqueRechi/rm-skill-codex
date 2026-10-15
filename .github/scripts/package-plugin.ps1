@@ -84,9 +84,27 @@ if (Test-Path -LiteralPath $outputDirectory) {
 New-Item -ItemType Directory -Path $packageDirectory | Out-Null
 
 Copy-Item -LiteralPath 'README.md', 'LICENSE', 'VERSION' -Destination $packageDirectory
-Copy-Item -LiteralPath '.agents', 'plugins' -Destination $packageDirectory -Recurse
+Copy-Item -LiteralPath '.agents', 'plugins' -Destination $packageDirectory -Recurse -Force
 
-Compress-Archive -LiteralPath $packageDirectory -DestinationPath $archivePath
+# Compress-Archive skips dot-directories on Linux, which would drop .agents and .codex-plugin.
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::CreateFromDirectory($packageDirectory, $archivePath, 'Optimal', $true)
+
+$requiredEntries = @(
+    'rm-skill-codex/.agents/plugins/marketplace.json',
+    "rm-skill-codex/plugins/$pluginName/.codex-plugin/plugin.json"
+)
+$archive = [System.IO.Compression.ZipFile]::OpenRead($archivePath)
+try {
+    $entryNames = $archive.Entries | ForEach-Object { $_.FullName -replace '\\', '/' }
+} finally {
+    $archive.Dispose()
+}
+foreach ($requiredEntry in $requiredEntries) {
+    if ($entryNames -notcontains $requiredEntry) {
+        throw "$archiveName is missing $requiredEntry."
+    }
+}
 $checksum = (Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvariant()
 $checksumPath = "$archivePath.sha256"
 Set-Content -LiteralPath $checksumPath -Value "$checksum  $archiveName" -Encoding ascii
