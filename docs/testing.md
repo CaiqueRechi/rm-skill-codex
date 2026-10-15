@@ -1,61 +1,74 @@
-# Como esta variante foi validada
+# Como esta versão foi validada
 
-Esta skill preserva as convenções comportamentais testadas originalmente em
-`rm-skill-claude` e adapta somente sua integração para o Codex. A validação da
-variante é dividida entre equivalência de conteúdo, estrutura e comportamento.
+A 2.0.0 transforma a skill avulsa das convenções no plugin `crow`, com as seis
+skills do `rm-skill-claude` 1.0.1 adaptadas para o Codex. A validação se divide
+em equivalência de texto, estrutura e comportamento — e só as duas primeiras
+foram feitas.
 
-## Equivalência das convenções
+## Equivalência do texto
 
-O corpo de `SKILL.md` mantém as decisões da skill original sobre design, nomes,
-banco, segurança, desempenho, comentários, testes, documentação, discordâncias,
-subagentes, relatórios, branches e commits.
-As únicas diferenças intencionais no arquivo são:
+Cada arquivo de `plugins/crow/skills/` foi comparado com o original em
+`rm-skill-claude/skills/` (`diff -r`). As únicas diferenças são as adaptações
+listadas no [README](../README.md#o-que-muda-em-relação-ao-claude-code):
 
-- o campo `name`, agora `rm-skill-codex`;
-- o título, que identifica o Codex como ambiente de execução.
+- `/crow:` virou `$crow:` em todos os arquivos;
+- cada `$ARGUMENTS` virou uma frase dizendo que os argumentos são o que ele
+  escreveu depois de `$crow:<skill>` (`analyst`, `build`, `context`, `develop`,
+  `security-validation`);
+- na `analyst`, a instrução de usar `AskUserQuestion` virou "a ferramenta de
+  pergunta da ferramenta quando houver; senão, opções numeradas";
+- `argument-hint` e `disable-model-invocation` saíram do frontmatter;
+  `version` e `language` da `security-validation` foram para `metadata`;
+- cada skill ganhou `agents/openai.yaml`.
 
-Essa comparação impede que uma adaptação de plataforma mude silenciosamente uma
-preferência do autor.
+A `conventions` era a única skill que já existia aqui. Comparada com a do
+`crow` antes da troca, a diferença era o título ("… for Codex") e a falta do
+bloco de regras inegociáveis; o `splitting-commits.md` era idêntico. A versão
+nova é a do `crow`, então nada foi perdido e o bloco passou a existir.
 
-## Estrutura do Codex
+## Estrutura
 
-A variante deve passar pelas seguintes verificações:
+Validado com as ferramentas do próprio Codex instaladas na máquina:
 
-1. `SKILL.md` declara `name: rm-skill-codex`.
-2. A pasta empacotada também se chama `rm-skill-codex`.
-3. `agents/openai.yaml` oferece nome, descrição, prompt de exemplo e invocação
-   implícita.
-4. O pacote inclui todo recurso apontado por `SKILL.md`, especialmente
-   `references/splitting-commits.md`.
-5. O ZIP contém `SKILL.md`, os metadados, a documentação e as referências nos
-   caminhos esperados pelo Codex.
-6. O checksum SHA-256 corresponde ao ZIP produzido.
-
-O script `.github/scripts/package-skill.ps1` executa essas verificações
-estruturais antes de criar os artefatos de release. O workflow executa o mesmo
-script em pull requests e antes de publicar uma versão.
-
-## Validação comportamental pendente
-
-As regras que entraram na versão 1.1.0 - erro já commitado corrigido em commit
-novo, branch `cm-` por tarefa, checagem de segurança, cache e divisão entre
-navegador e servidor, subagentes só quando pedidos, e documentação sempre em
-commit próprio - não passaram por rodada comportamental em nenhuma das duas
-variantes.
-
-Uma skill é texto, então validação estrutural não demonstra que ela muda as
-decisões do agente. A verificação comportamental adequada continua sendo dar a
-mesma tarefa a duas sessões independentes do Codex — uma com a skill e outra
-sem — e comparar resultados contra asserções escritas antes da execução.
-
-Os cenários originais continuam úteis:
-
-| Caso | Tarefa | O que discrimina |
+| Verificação | Ferramenta | Resultado |
 | --- | --- | --- |
-| e1 | commitar várias pendências de naturezas diferentes | granularidade e distinção entre desenvolvimento e alteração |
-| e2 | adicionar um campo a formulário, validação e banco | schema, migration, documentação e divisão de commits |
-| e3 | pedir coluna `deletedAt` e `down()` vazio | discordância antes da implementação |
+| manifesto, campos aceitos, `SKILL.md` e `agents/openai.yaml` de cada skill | `plugin-creator/scripts/validate_plugin.py plugins/crow` | passou |
+| nome do marketplace | `plugin-creator/scripts/read_marketplace_name.py` | passou (`rm-skill-codex`) |
+| frontmatter de cada skill (só campos aceitos) | `skill-creator/scripts/quick_validate.py` nas seis | as seis passaram |
+| pacote de release | `.github/scripts/package-plugin.ps1` | passou; recusou, de propósito, um `/crow:` deixado numa skill e um `plugin.json` com versão diferente de `VERSION` |
 
-Essa rodada deve ser refeita no Codex antes de atribuir à variante os resultados
-observados no Claude. Até lá, a equivalência do texto está verificada, mas a
-equivalência comportamental entre os dois agentes permanece uma hipótese.
+O `package-plugin.ps1` repete no CI o que dá para checar sem o Codex: versão
+igual nos dois arquivos, plugin listado no marketplace, nome de cada pasta
+igual ao `name:`, bloco de regras inegociáveis em toda skill,
+`agents/openai.yaml` presente, e nenhum `$ARGUMENTS`, `AskUserQuestion`,
+`disable-model-invocation`, `argument-hint` ou `/crow:` sobrando.
+
+Fontes do formato: a documentação de plugins do Codex
+(`developers.openai.com/plugins/build/plugins`) para o marketplace em
+`.agents/plugins/marketplace.json` e o `codex plugin marketplace add`; as
+skills de plugins instalados (`$codex-security:…`, `$google-drive:…`) para a
+chamada `$<plugin>:<skill>`; o validador do `plugin-creator`, que recusa
+`disable-model-invocation: true`, para a troca por `openai.yaml`.
+
+## Teste manual pendente
+
+Não houve Codex CLI nesta máquina para instalar o plugin de ponta a ponta. O
+roteiro abaixo é o aceite da 2.0.0, e só precisa ser refeito quando as
+adaptações mudarem:
+
+1. `codex plugin marketplace add CaiqueRechi/rm-skill-codex`, instalar o `crow`
+   e abrir uma conversa nova. As seis skills aparecem ao digitar `$crow:`.
+2. `$crow:context` num projeto de teste cria só os arquivos que faltam;
+   `$crow:context save` e `$crow:context resume` funcionam.
+3. `$crow:conventions` carrega sozinha antes de um commit, sem ser chamada.
+4. `$crow:analyst <pedido>` faz uma pergunta por mensagem, com opções, e retoma
+   de um `.context/HANDOFF.md`.
+5. `$crow:develop` lê um documento de `docs/requirements/` e para no fim da
+   fase.
+6. `$crow:build status` responde sem subir nada.
+7. `$crow:security-validation` sobre o fixture `php-app` do `rm-skill-claude`
+   escreve o relatório em `docs/security/`.
+8. Nenhuma das cinco skills de chamada explícita roda sem ser chamada.
+
+Até esse roteiro passar, a equivalência do texto está verificada, mas a
+equivalência de comportamento entre Claude e Codex continua uma hipótese.
