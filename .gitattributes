@@ -1,0 +1,2 @@
+# Codex requires SKILL.md to start with "---" and a LF; a CRLF checkout breaks the frontmatter.
+* text=auto eol=lf
