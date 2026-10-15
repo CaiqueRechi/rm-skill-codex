@@ -1,0 +1,27 @@
+{
+  "name": "crow",
+  "version": "1.1.0",
+  "description": "Caique Rechi Mehret's skills for Codex: his working conventions and the tools built on them.",
+  "author": {
+    "name": "Caique Rechi Mehret",
+    "url": "https://github.com/CaiqueRechi"
+  },
+  "homepage": "https://github.com/CaiqueRechi/rm-skill-codex",
+  "repository": "https://github.com/CaiqueRechi/rm-skill-codex",
+  "license": "MIT",
+  "keywords": ["conventions", "requirements", "context", "docker", "security"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "crow",
+    "shortDescription": "Caique's conventions and working skills",
+    "longDescription": "Caique's working conventions plus the skills built on them: project context handed across tools, a requirements analyst, phase-by-phase development, a local Docker environment and defensive security validation.",
+    "developerName": "Caique Rechi Mehret",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "Use $crow:context to prepare this project.",
+      "Use $crow:analyst to survey a new request.",
+      "Use $crow:develop to build the next phase."
+    ]
+  }
+}

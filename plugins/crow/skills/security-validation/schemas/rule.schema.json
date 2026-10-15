@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rule.schema.json",
+  "title": "Regra de validação de segurança",
+  "description": "Contrato de uma regra do catálogo (seção 5 da especificação). weakness_refs, verification_refs e attack_refs da seção 4.3 ficam em references: cwe, asvs/wstg e attack/atlas.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "canonical_name",
+    "display_name_pt_br",
+    "aliases",
+    "category",
+    "description",
+    "scope",
+    "methods",
+    "references",
+    "severity_default",
+    "confidence_threshold",
+    "preconditions",
+    "pass_criteria",
+    "fail_criteria",
+    "inconclusive_criteria",
+    "false_positive_guidance",
+    "remediation",
+    "requires_authorization",
+    "safe_by_default",
+    "manual_review_required",
+    "related_controls",
+    "duplicate_of"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^SV-[A-Z]{2,4}-[0-9]{4}$" },
+    "canonical_name": { "type": "string", "minLength": 3 },
+    "display_name_pt_br": { "type": "string", "minLength": 3 },
+    "aliases": { "$ref": "#/$defs/textList" },
+    "category": { "type": "string", "pattern": "^[A-Z_]+\\.[A-Z_]+$" },
+    "description": { "type": "string", "minLength": 20 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["asset_types"],
+      "properties": {
+        "asset_types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "web_application",
+              "api",
+              "desktop_application",
+              "database_client",
+              "database",
+              "operating_system",
+              "network",
+              "cloud",
+              "container",
+              "pipeline",
+              "repository",
+              "dependency",
+              "iot_device",
+              "ot_system",
+              "ai_system",
+              "logging_system",
+              "backup_system"
+            ]
+          }
+        }
+      }
+    },
+    "methods": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "static_analysis",
+          "dynamic_testing",
+          "manual_review",
+          "configuration_review",
+          "dependency_analysis"
+        ]
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cwe", "asvs", "wstg", "attack"],
+      "properties": {
+        "cwe": { "$ref": "#/$defs/idList", "items": { "pattern": "^CWE-[0-9]+$" } },
+        "asvs": { "$ref": "#/$defs/idList", "items": { "pattern": "^V[0-9]+\\.[0-9]+\\.[0-9]+$" } },
+        "wstg": { "$ref": "#/$defs/idList", "items": { "pattern": "^WSTG-[A-Z]{4}-[0-9]{2}$" } },
+        "attack": { "$ref": "#/$defs/idList", "items": { "pattern": "^T[0-9]{4}(\\.[0-9]{3})?$" } },
+        "atlas": { "$ref": "#/$defs/idList", "items": { "pattern": "^AML\\.T[0-9]{4}(\\.[0-9]{3})?$" } },
+        "note": { "type": "string" }
+      }
+    },
+    "severity_default": { "enum": ["critical", "high", "medium", "low", "informational"] },
+    "confidence_threshold": { "enum": ["high", "medium", "low"] },
+    "preconditions": { "$ref": "#/$defs/nonEmptyTextList" },
+    "pass_criteria": { "$ref": "#/$defs/nonEmptyTextList" },
+    "fail_criteria": { "$ref": "#/$defs/nonEmptyTextList" },
+    "inconclusive_criteria": { "$ref": "#/$defs/nonEmptyTextList" },
+    "false_positive_guidance": { "$ref": "#/$defs/nonEmptyTextList" },
+    "remediation": { "$ref": "#/$defs/nonEmptyTextList" },
+    "requires_authorization": { "type": "boolean" },
+    "safe_by_default": { "const": true },
+    "manual_review_required": { "type": "boolean" },
+    "related_controls": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^SV-[A-Z]{2,4}-[0-9]{4}$" }
+    },
+    "duplicate_of": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^SV-[A-Z]{2,4}-[0-9]{4}$" }
+      ]
+    }
+  },
+  "$defs": {
+    "textList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "nonEmptyTextList": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 3 }
+    },
+    "idList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    }
+  }
+}

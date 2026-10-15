@@ -1,0 +1,7 @@
+interface:
+  display_name: "Local Docker environment"
+  short_description: "Run the project locally in Docker to test it"
+  default_prompt: "Use $crow:build to bring this project up locally in Docker."
+
+policy:
+  allow_implicit_invocation: false

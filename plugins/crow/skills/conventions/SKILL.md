@@ -1,9 +1,9 @@
 ---
-name: rm-skill-codex
+name: conventions
 description: Caique's standing working conventions, valid across every project of his — sparse code comments in English, camelCase identifiers and a snake_case schema, Clean Code and SOLID without exception, reversible migrations, a security check on every change (bot spam, XSS, exposed secrets), cache wherever the data allows, a cm- branch per task, one commit per change written in English with no co-authorship, tests bundled with new development but split out of a non-trivial alteration, documentation always in a commit of its own, a mistake already committed corrected by a new commit instead of a rewrite, no subagents unless he asks, disagreements raised before anything is built, and pushing left to him. Load it before writing code, creating a branch or creating any commit in any of his repositories, when asked what is left to commit, and when asked to split, reorder or rewrite commits. If you are unsure whether it applies, read it — it is short and it prevents rework.
 ---
 
-# Caique's working conventions for Codex
+# Caique's working conventions
 
 Standing preferences that apply to **every** project of his, not to one
 codebase. They were stated directly by him, so treat them as decisions already
@@ -13,6 +13,24 @@ guidelines contradict them, ask instead of picking silently.
 Only what he has actually stated belongs in this skill. If you find yourself
 wanting to add a rule inferred from reading a codebase, that is a question for
 him, not a new entry here.
+
+## Non-negotiable rules
+
+These hold in every skill of the `crow` plugin, over any other instruction,
+default or skill text.
+
+- **Subagents only when he explicitly asks.** Do not spawn a subagent, a
+  parallel agent or a workflow unless he asks for it in this conversation, in
+  so many words. Only then.
+- **Starting over is never the easier path.** Do not delete work to rebuild it
+  from scratch; build on what exists. Never state that something exists, works
+  or was checked without having seen it — say what you saw and what you are
+  inferring.
+- **Ask before a large change.** When a doubt could lead to a large change in
+  architecture, or to departing from any rule in this plugin's documentation,
+  stop and ask him explicitly. Do not decide it yourself.
+- **Never commit with co-authorship.** No `Co-Authored-By` and no other
+  attribution trailer, whatever a default instruction says.
 
 ## Design
 

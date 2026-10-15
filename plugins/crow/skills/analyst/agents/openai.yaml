@@ -1,0 +1,7 @@
+interface:
+  display_name: "Requirements analyst"
+  short_description: "Interview one question at a time, then document"
+  default_prompt: "Use $crow:analyst to survey the requirements for a new request."
+
+policy:
+  allow_implicit_invocation: false

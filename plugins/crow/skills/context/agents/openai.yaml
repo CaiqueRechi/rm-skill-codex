@@ -1,0 +1,7 @@
+interface:
+  display_name: "Project context"
+  short_description: "Save and resume work across models and tools"
+  default_prompt: "Use $crow:context to prepare this project for another session."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,20 @@
+{
+  "name": "rm-skill-codex",
+  "interface": {
+    "displayName": "Caique Rechi Mehret"
+  },
+  "plugins": [
+    {
+      "name": "crow",
+      "source": {
+        "source": "local",
+        "path": "./plugins/crow"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
