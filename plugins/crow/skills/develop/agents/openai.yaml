@@ -1,0 +1,7 @@
+interface:
+  display_name: "Develop from requirements"
+  short_description: "Build the documented requirements phase by phase"
+  default_prompt: "Use $crow:develop to build the next phase of the requirements."
+
+policy:
+  allow_implicit_invocation: false

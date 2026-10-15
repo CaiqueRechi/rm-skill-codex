@@ -1,0 +1,7 @@
+interface:
+  display_name: "Security validation"
+  short_description: "Defensive security validation with a report"
+  default_prompt: "Use $crow:security-validation to validate the security of this project."
+
+policy:
+  allow_implicit_invocation: false
