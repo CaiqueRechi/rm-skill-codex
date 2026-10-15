@@ -41,7 +41,11 @@ O `package-plugin.ps1` repete no CI o que dá para checar sem o Codex: versão
 igual nos dois arquivos, plugin listado no marketplace, nome de cada pasta
 igual ao `name:`, bloco de regras inegociáveis em toda skill,
 `agents/openai.yaml` presente, e nenhum `$ARGUMENTS`, `AskUserQuestion`,
-`disable-model-invocation`, `argument-hint` ou `/crow:` sobrando.
+`disable-model-invocation`, `argument-hint` ou `/crow:` sobrando. Depois de
+montar o ZIP, confere que `.agents/plugins/marketplace.json` e
+`.codex-plugin/plugin.json` estão dentro dele: são pastas ocultas no Linux, e o
+`Compress-Archive` as deixaria de fora sem erro. Essa parte não foi exercida
+no Linux antes do primeiro CI — só no Windows.
 
 Fontes do formato: a documentação de plugins do Codex
 (`developers.openai.com/plugins/build/plugins`) para o marketplace em
