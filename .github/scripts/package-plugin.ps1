@@ -84,7 +84,7 @@ if (Test-Path -LiteralPath $outputDirectory) {
 New-Item -ItemType Directory -Path $packageDirectory | Out-Null
 
 Copy-Item -LiteralPath 'README.md', 'LICENSE', 'VERSION' -Destination $packageDirectory
-Copy-Item -LiteralPath '.agents', 'plugins' -Destination $packageDirectory -Recurse -Force
+Copy-Item -LiteralPath '.agents', 'plugins', 'assets' -Destination $packageDirectory -Recurse -Force
 
 # Compress-Archive skips dot-directories on Linux, which would drop .agents and .codex-plugin.
 Add-Type -AssemblyName System.IO.Compression.FileSystem
