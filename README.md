@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.png" alt="CrowDex" width="480">
+</p>
+
 # rm-skill-codex
 
 Plugin `crow` do Codex: as mesmas skills do plugin `crow` do Claude Code, para
