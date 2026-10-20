@@ -6,8 +6,8 @@
     "name": "Caique Rechi Mehret",
     "url": "https://github.com/CaiqueRechi"
   },
-  "homepage": "https://github.com/CaiqueRechi/rm-skill-codex",
-  "repository": "https://github.com/CaiqueRechi/rm-skill-codex",
+  "homepage": "https://github.com/CaiqueRechi/codex-crow",
+  "repository": "https://github.com/CaiqueRechi/codex-crow",
   "license": "MIT",
   "keywords": ["conventions", "requirements", "context", "docker", "security"],
   "skills": "./skills/",
