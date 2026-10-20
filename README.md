@@ -2,7 +2,7 @@
   <img src="assets/logo.png" alt="CrowDex" width="480">
 </p>
 
-# rm-skill-codex
+# codex-crow
 
 Plugin `crow` do Codex: as mesmas skills do plugin `crow` do Claude Code, para
 eu continuar no Codex quando os tokens do Claude acabam, no mesmo projeto e do
@@ -10,9 +10,9 @@ mesmo ponto.
 
 **Autor:** Caique Rechi Mehret
 
-> **A fonte é o [rm-skill-claude](https://github.com/CaiqueRechi/rm-skill-claude).**
+> **A fonte é o [claude-crow](https://github.com/CaiqueRechi/claude-crow).**
 > As skills são escritas lá e adaptadas para cá. Correção feita só aqui some na
-> próxima versão — corrija no `rm-skill-claude`.
+> próxima versão — corrija no `claude-crow`.
 
 | Chamada | Skill | Quando roda |
 | --- | --- | --- |
@@ -27,8 +27,8 @@ A ordem num projeto novo: `context` → `analyst` → `develop` → `build` →
 `security-validation`. A `conventions` vale o tempo todo. No Codex, digitar `@`
 também lista o plugin e as skills dele.
 
-O que cada skill faz e como usar está na documentação do `rm-skill-claude`
-([docs/](https://github.com/CaiqueRechi/rm-skill-claude/tree/main/docs)) — o
+O que cada skill faz e como usar está na documentação do `claude-crow`
+([docs/](https://github.com/CaiqueRechi/claude-crow/tree/main/docs)) — o
 comportamento é o mesmo; só a chamada muda de `/crow:` para `$crow:`.
 
 ## O que muda em relação ao Claude Code
@@ -53,7 +53,7 @@ Tudo o mais é cópia do texto original.
 O repositório é um marketplace do Codex com o plugin dentro. Pelo terminal:
 
 ```bash
-codex plugin marketplace add CaiqueRechi/rm-skill-codex
+codex plugin marketplace add CaiqueRechi/codex-crow
 ```
 
 Depois instale o `crow` pelo navegador de plugins — `/plugins` no Codex CLI,
@@ -61,7 +61,21 @@ ou o diretório de plugins no app — e abra uma conversa nova, que é quando o
 Codex carrega as skills.
 
 Para usar um clone local, passe o caminho da pasta no lugar de
-`CaiqueRechi/rm-skill-codex`.
+`CaiqueRechi/codex-crow`.
+
+### Vindo do marketplace rm-skill-codex
+
+Remova a referência antiga, adicione o marketplace novo e reinstale o plugin:
+
+```bash
+codex plugin marketplace remove rm-skill-codex
+codex plugin marketplace add CaiqueRechi/codex-crow
+codex plugin add crow@codex-crow
+```
+
+Depois abra uma conversa nova, que é quando o Codex recarrega as skills. O
+plugin continua se chamando `crow`; só o repositório e o marketplace mudaram
+para `codex-crow`.
 
 ### Vindo do rm-skill-codex 1.x
 
@@ -72,33 +86,33 @@ traria esta estrutura nova para um lugar onde o Codex não a lê como plugin.
 
 ### Instalação por release
 
-As [Releases](https://github.com/CaiqueRechi/rm-skill-codex/releases) oferecem
+As [Releases](https://github.com/CaiqueRechi/codex-crow/releases) oferecem
 um ZIP com o marketplace e o checksum SHA-256. Baixe os dois arquivos da versão
-desejada, valide o checksum, extraia e adicione a pasta `rm-skill-codex`
+desejada, valide o checksum, extraia e adicione a pasta `codex-crow`
 extraída como marketplace.
 
 No Linux:
 
 ```bash
-sha256sum -c crow-v2.0.0.zip.sha256
-unzip crow-v2.0.0.zip -d ~/plugins
-codex plugin marketplace add ~/plugins/rm-skill-codex
+sha256sum -c crow-v2.1.0.zip.sha256
+unzip crow-v2.1.0.zip -d ~/plugins
+codex plugin marketplace add ~/plugins/codex-crow
 ```
 
 No PowerShell, compare o hash calculado com o valor do arquivo `.sha256` antes
 de extrair:
 
 ```powershell
-Get-FileHash .\crow-v2.0.0.zip -Algorithm SHA256
-Expand-Archive .\crow-v2.0.0.zip -DestinationPath "$HOME\plugins"
-codex plugin marketplace add "$HOME\plugins\rm-skill-codex"
+Get-FileHash .\crow-v2.1.0.zip -Algorithm SHA256
+Expand-Archive .\crow-v2.1.0.zip -DestinationPath "$HOME\plugins"
+codex plugin marketplace add "$HOME\plugins\codex-crow"
 ```
 
 ## Estrutura
 
 | Caminho | Para quê |
 | --- | --- |
-| `.agents/plugins/marketplace.json` | o marketplace `rm-skill-codex`, com o plugin `crow` |
+| `.agents/plugins/marketplace.json` | o marketplace `codex-crow`, com o plugin `crow` |
 | `plugins/crow/.codex-plugin/plugin.json` | o manifesto do plugin |
 | `plugins/crow/skills/<nome>/SKILL.md` | cada skill; o nome da pasta tem de bater com o `name:` |
 | `plugins/crow/skills/<nome>/agents/openai.yaml` | nome na interface e se a skill pode rodar sozinha |
@@ -126,7 +140,7 @@ entra na `main` com uma versão ainda não publicada, o workflow cria:
 - o checksum `crow-vX.Y.Z.zip.sha256`.
 
 As tags `v1.0.0` e `v1.1.0` são da skill avulsa, antes de virar plugin; por
-isso as releases do plugin usam o prefixo `crow-`, como no `rm-skill-claude`.
+isso as releases do plugin usam o prefixo `crow-`, como no `claude-crow`.
 
 ## Verificação
 
@@ -135,6 +149,6 @@ roteiro do teste manual no Codex.
 
 ## O que entra aqui
 
-Nada é escrito direto aqui: tudo vem do `rm-skill-claude`. Preferência minha
+Nada é escrito direto aqui: tudo vem do `claude-crow`. Preferência minha
 entra lá, nas convenções; detalhe de uma base específica pertence ao
 `AGENTS.md` daquele repositório.

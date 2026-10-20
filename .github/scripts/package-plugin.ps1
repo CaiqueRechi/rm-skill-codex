@@ -4,6 +4,7 @@ $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 Set-Location $repositoryRoot
 
 $pluginName = 'crow'
+$marketplaceName = 'codex-crow'
 $pluginRoot = Join-Path 'plugins' $pluginName
 
 function Read-Text([string] $path) {
@@ -25,6 +26,9 @@ if ($manifest.version -ne $version) {
 }
 
 $marketplace = Read-Text '.agents/plugins/marketplace.json' | ConvertFrom-Json
+if ($marketplace.name -ne $marketplaceName) {
+    throw ".agents/plugins/marketplace.json must declare name: $marketplaceName."
+}
 $marketplaceEntry = $marketplace.plugins | Where-Object { $_.name -eq $pluginName }
 if ($null -eq $marketplaceEntry -or $marketplaceEntry.source.path -ne "./plugins/$pluginName") {
     throw ".agents/plugins/marketplace.json must list $pluginName at ./plugins/$pluginName."
@@ -36,6 +40,49 @@ $claudeOnlyConstructs = @('$ARGUMENTS', 'AskUserQuestion', 'disable-model-invoca
 $skillFiles = Get-ChildItem -Path (Join-Path $pluginRoot 'skills/*/SKILL.md') -File
 if ($skillFiles.Count -eq 0) {
     throw "At least one skill is required in $pluginRoot/skills/<name>/SKILL.md."
+}
+
+$installationPolicyPath = '.github/installation-policy.md'
+if (-not (Test-Path -LiteralPath $installationPolicyPath -PathType Leaf)) {
+    throw "$installationPolicyPath is required."
+}
+$installationPolicy = (Read-Text $installationPolicyPath).TrimEnd("`n")
+foreach ($policyConsumer in @(
+    (Join-Path $pluginRoot 'skills/develop/SKILL.md'),
+    (Join-Path $pluginRoot 'skills/build/SKILL.md')
+)) {
+    if (-not (Read-Text $policyConsumer).Contains($installationPolicy)) {
+        throw "$policyConsumer must contain $installationPolicyPath word-for-word."
+    }
+}
+
+# The retired repository name is historical only. It may appear in migration
+# notes and review evidence, never as the active marketplace or install target.
+$retiredRepositoryName = 'rm-skill-codex'
+$retiredNameHistoryFiles = @(
+    '.github/scripts/package-plugin.ps1',
+    'docs/requirements/revisao-fase-0-codex.md',
+    'docs/requirements/revisao-fase-0-codex-traceability.md',
+    'docs/testing.md'
+)
+foreach ($trackedFile in (& git ls-files)) {
+    $normalizedPath = $trackedFile -replace '\\', '/'
+    if ($retiredNameHistoryFiles -contains $normalizedPath) {
+        continue
+    }
+
+    $lines = @(Get-Content -Encoding UTF8 -LiteralPath $trackedFile)
+    $insideMigrationSection = $false
+    for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
+        $line = $lines[$lineIndex]
+        if ($normalizedPath -eq 'README.md' -and $line -match '^#{1,6}\s+(.+)$') {
+            $insideMigrationSection = $Matches[1].StartsWith('Vindo do')
+        }
+        if ($line.Contains($retiredRepositoryName) -and
+            -not ($normalizedPath -eq 'README.md' -and $insideMigrationSection)) {
+            throw "$normalizedPath`:$($lineIndex + 1) uses retired name $retiredRepositoryName outside migration history."
+        }
+    }
 }
 
 foreach ($skillFile in $skillFiles) {
@@ -74,7 +121,7 @@ foreach ($requiredFile in @('README.md', 'LICENSE', 'VERSION')) {
 }
 
 $outputDirectory = Join-Path $repositoryRoot 'dist'
-$packageDirectory = Join-Path $outputDirectory 'rm-skill-codex'
+$packageDirectory = Join-Path $outputDirectory $marketplaceName
 $archiveName = "$pluginName-v$version.zip"
 $archivePath = Join-Path $outputDirectory $archiveName
 
@@ -85,14 +132,17 @@ New-Item -ItemType Directory -Path $packageDirectory | Out-Null
 
 Copy-Item -LiteralPath 'README.md', 'LICENSE', 'VERSION' -Destination $packageDirectory
 Copy-Item -LiteralPath '.agents', 'plugins', 'assets' -Destination $packageDirectory -Recurse -Force
+New-Item -ItemType Directory -Path (Join-Path $packageDirectory '.github') | Out-Null
+Copy-Item -LiteralPath $installationPolicyPath -Destination (Join-Path $packageDirectory '.github')
 
 # Compress-Archive skips dot-directories on Linux, which would drop .agents and .codex-plugin.
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::CreateFromDirectory($packageDirectory, $archivePath, 'Optimal', $true)
 
 $requiredEntries = @(
-    'rm-skill-codex/.agents/plugins/marketplace.json',
-    "rm-skill-codex/plugins/$pluginName/.codex-plugin/plugin.json"
+    "$marketplaceName/.agents/plugins/marketplace.json",
+    "$marketplaceName/.github/installation-policy.md",
+    "$marketplaceName/plugins/$pluginName/.codex-plugin/plugin.json"
 )
 $archive = [System.IO.Compression.ZipFile]::OpenRead($archivePath)
 try {

@@ -1,6 +1,28 @@
 # Como esta versão foi validada
 
-A 2.0.0 transforma a skill avulsa das convenções no plugin `crow`, com as seis
+## 2.1.0 — revisão Fase 0
+
+A 2.1.0 alinha a edição Codex à Fase 0 do `claude-crow`: marketplace e
+repositório passam a usar a identidade `codex-crow`, o README explica a
+migração, e `develop` e `build` compartilham literalmente a mesma política de
+downloads e instalações.
+
+O empacotamento valida:
+
+- `VERSION`, manifesto e marketplace com nomes e versão coerentes;
+- ausência do nome aposentado fora do histórico de migração;
+- política de `.github/installation-policy.md` presente, palavra por palavra,
+  nas duas skills;
+- política incluída no ZIP, junto dos manifestos ocultos;
+- ausência de construções exclusivas do Claude nas skills do Codex.
+
+Além dele, as seis skills passam individualmente pelo `quick_validate.py`, e
+o plugin inteiro passa pelo `validate_plugin.py`. O teste manual de instalação
+pela URL nova depende do rename do repositório remoto após o merge.
+
+## 2.0.0 — conversão inicial para plugin
+
+A 2.0.0 transformou a skill avulsa das convenções no plugin `crow`, com as seis
 skills do `rm-skill-claude` 1.0.1 adaptadas para o Codex. A validação se divide
 em equivalência de texto, estrutura e comportamento — e só as duas primeiras
 foram feitas.
