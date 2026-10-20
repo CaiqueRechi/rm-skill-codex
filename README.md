@@ -94,8 +94,8 @@ extraída como marketplace.
 No Linux:
 
 ```bash
-sha256sum -c crow-v2.0.0.zip.sha256
-unzip crow-v2.0.0.zip -d ~/plugins
+sha256sum -c crow-v2.1.0.zip.sha256
+unzip crow-v2.1.0.zip -d ~/plugins
 codex plugin marketplace add ~/plugins/codex-crow
 ```
 
@@ -103,8 +103,8 @@ No PowerShell, compare o hash calculado com o valor do arquivo `.sha256` antes
 de extrair:
 
 ```powershell
-Get-FileHash .\crow-v2.0.0.zip -Algorithm SHA256
-Expand-Archive .\crow-v2.0.0.zip -DestinationPath "$HOME\plugins"
+Get-FileHash .\crow-v2.1.0.zip -Algorithm SHA256
+Expand-Archive .\crow-v2.1.0.zip -DestinationPath "$HOME\plugins"
 codex plugin marketplace add "$HOME\plugins\codex-crow"
 ```
 
