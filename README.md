@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="CrowDex" width="480">
+  <img src="assets/CrowDex_transparente_1024.png" alt="CrowDex" width="480">
 </p>
 
 # codex-crow
